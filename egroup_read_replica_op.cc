@@ -56,7 +56,11 @@ DEFINE_int64(unreadable_egroup ,-1,
 
 
 DEFINE_bool(allow_partial_unreadable_egroups, false,
+            "doesnt throw error and return the"
+            " slices even though some slices are unreadable");
             "doesnt throw error and return the slices even though some slices are unreadable");
+            "doesnt throw error and return the"
+            " slices even though some slices are unreadable");
 
 
 DEFINE_int64(disk_1 ,-1,
@@ -1158,7 +1162,7 @@ void ExtentStore::DiskManager::ExtentGroupReadReplicaOp::ReadOpRegistered() {
     // managed extent groups.
     TAGGED_DCHECK(managed_by_aes_);
 
-    TAGGED_VLOG(1) << "Fetching extent group physical state from Medusa";
+     TAGGED_VLOG(1) << "Fetching extent group physical state from Medusa";
     TRACE(at_, 0) << "Looking up Medusa to fetch extent group physical state";
 
     if (!TryLockAESDB()) {
@@ -1820,7 +1824,14 @@ void ExtentStore::DiskManager::ExtentGroupReadReplicaOp::AIODiskReadData() {
 
     TAGGED_CHECK(slice_state->has_extent_group_offset());
     TAGGED_CHECK(slice_state->has_transformed_length());
-     LOG(INFO)<<"extent_based_metadata_format_ :"<<extent_based_metadata_format_<<endl ;
+    LOG(INFO) << "slice_id being read:" << slice_state->slice_id()
+              << "at offset" << slice_state->extent_group_offset()
+              << endl;
+     LOG(INFO) << "extent_based_metadata_format_ :"
+               << extent_based_metadata_format_ << endl;
+    LOG(INFO) << "slice_id being read:" << slice_state->slice_id()
+              << "at offset" << slice_state->extent_group_offset()
+              << endl;
     if (extent_based_metadata_format_) {
       TAGGED_DCHECK(disk_manager_->shared_extent_write_state_);
       BlockStore::Component *const component =
@@ -1969,6 +1980,10 @@ void ExtentStore::DiskManager::ExtentGroupReadReplicaOp::AIODiskReadDataPerSlice
 
 
     // changes
+
+
+
+
 
     LOG(INFO)<<"AIODiskReadData______per_slice"<<++slices_passed<< " slice id  -> "<<slice_state->slice_id()<<endl;
 
