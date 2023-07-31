@@ -138,9 +138,7 @@ DECLARE_int32(stargate_xmount_port);
 namespace nutanix { namespace tools { namespace stargate {
 
 class MergeReplicas {
-
  public:
-
     // List of possible errors
     enum ErrorType {
             kNoError,
@@ -322,9 +320,7 @@ class MergeReplicas {
         MedusaError::Type error,
         shared_ptr<vector<MedusaValue::PtrConst>> value_vec,
         Notification *notification);
-
 };
-
 //----------------------------------------------------------------------------
 
 
@@ -371,9 +367,7 @@ void MergeReplicas::Validate() {
 
 
     LOG(INFO) << "Validate complete";
-
 }
-
 // --------------------------------------------------------------------------
 
 void MergeReplicas::Execute(
@@ -695,11 +689,9 @@ void MergeReplicas::FixerOpHelper(
     // call the rpc
     ed_->Wrap(&rpc_done_cb);
     stargate_ifc_->FixExtentGroups(arg, rpc_done_cb);
-
 }
 
 // --------------------------------------------------------------------------
-
 
 void MergeReplicas::FixerOpHelperDone(
         const shared_ptr<FixExtentGroupsArg>& arg,
@@ -887,12 +879,10 @@ void MergeReplicas::ReplicateEgroupHelper(
     LOG(INFO) << "Added disk " << dest_disk_id
               << " in medusa metadata of egroup " << egroup_id
               << " arg: " << arg->ShortDebugString();
-
 }
 
 
 // --------------------------------------------------------------------------
-
 void MergeReplicas::SaveResult(const IOBuffer::Ptr& iobuf) const {
     if (FLAGS_target_file.empty()) {
         // Output to console.
@@ -1014,14 +1004,11 @@ void MergeReplicas::ReadReplicaEgroupHelperDone(StargateError::Type err,
                 unreadable_slices->push_back(
                         remote_ret->corrupt_slices().Get(ii));
             }
-
         }
 
 
         CHECK_GT(payload->size(), 0);
         CHECK_EQ(payload->size() % slice_size, 0) << payload->size();
-
-
         LOG(INFO) << "In ReplicaReadEgroupVerifyDone";
         if (unreadable_slices)
             LOG(INFO) << "unreadable_size:" << unreadable_slices->size();
@@ -1139,19 +1126,15 @@ void MergeReplicas::GetStargateInterface(int64 disk_id,
                     StringJoin(FLAGS_external_ip_for_offline, ":",
                             FLAGS_stargate_xmount_port);
             }
-
         }
     }
-
     LOG(INFO) << "stargate_leader_handle" << stargate_leader_handle;
-
     if (!rpc_ed_) {
         rpc_ed_ = make_shared<EventDriver>(1);
     }
     CHECK(rpc_ed_);
 
     if (use_http) {
-
         // standard mode
         stargate_ifc_ = StargateInterface::Create(
             rpc_ed_, stargate_leader_handle);
@@ -1171,14 +1154,10 @@ void MergeReplicas::GetStargateInterface(int64 disk_id,
     CHECK(stargate_ifc_);
     LOG(INFO) << "Created RPC interface for stargate at "
               << stargate_leader_handle;
-
-
 }
 // ---------------------------------------------------------------------------
 
 } } } // namespace
-
-
 
 using namespace nutanix::tools::stargate;
 
@@ -1204,5 +1183,4 @@ int main(int argc, char *argv[]) {
 
     ed->WaitForEvents();
     return 0;
-
 }
